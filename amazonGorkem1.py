@@ -2,8 +2,10 @@ from selenium import webdriver
 from selenium.webdriver import ActionChains
 import time
 
-browser = webdriver.Chrome()
+browser = webdriver.Chrome('/home/yaman/PycharmProjects/untitled/venv/chromedriver')
 browser.maximize_window()
+
+#we should use webriver wait for all elements instead of browser.find_element.
 
 #1. www.amazon.com sitesine gelecek ve anasayfanın açıldığını onaylayacak,
 browser.get("https://www.amazon.com/")
@@ -12,6 +14,8 @@ assert browser.title in webPageTitle
 print("You are on Amazon.com")
 
 #2. Login ekranını açıp, bir kullanıcı ile login olacak,
+
+# Let's use id instead of css selector
 browser.find_element_by_css_selector("#nav-link-accountList").click()
 browser.find_element_by_css_selector("#ap_email").send_keys("tezt1zs@gmail.com")
 browser.find_element_by_css_selector("#ap_password").send_keys("112233445566")
@@ -28,6 +32,8 @@ assert searchKeyword in searchKeywordResult
 print("Samsung Search Result")
 
 #5.Arama sonuclarindan 2. sayfaya tıklayacak ve açılan sayfada 2. sayfanın şu an gösterimde olduğunu onaylayacak,
+
+# Shorter selector please
 browser.find_element_by_css_selector(".a-pagination > li:nth-child(3)").click()
 assert "2" in browser.find_element_by_css_selector(".a-selected").text
 print("You are looking into Second Page")
@@ -45,6 +51,7 @@ wishListMenu = browser.find_element_by_css_selector(".nav-truncate")
 hover = ActionChains(browser).move_to_element(wishListMenu)
 hover.perform()
 time.sleep(1)
+#too looooong (try to use text link)
 browser.find_element_by_css_selector("#nav-flyout-wl-items > div > a:nth-child(1) > span").click()
 
 #8. Açılan sayfada bir önceki sayfada izlemeye alınmış ürünün bulunduğunu onaylayacak,
@@ -57,6 +64,9 @@ browser.find_element_by_link_text("Delete item").click()
 time.sleep(2)
 
 #10. Sayfada bu ürünün artık favorilere alınmadığını onaylayacak.
+
+#selector is too long
+#take icon element and assert is_displayed()
 deleteConfirmText = browser.find_element_by_css_selector(".a-row.a-spacing-none:nth-of-type(1)").text
 assert deleteConfirmText in wishListProductName
 print("Product deleted!")
